@@ -1,0 +1,19 @@
+{
+  "name": "show-me-stlouis",
+  "version": "1.0.0",
+  "description": "A map showing the best places around St. Louis.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krystaknight/show-me-stlouis.git"
+  },
+  "author": "Krysta Knight",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/krystaknight/show-me-stlouis/issues"
+  },
+  "homepage": "https://github.com/krystaknight/show-me-stlouis#readme"
+}
