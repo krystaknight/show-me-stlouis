@@ -17,3 +17,13 @@ function initMap()
     var bush = {lat: 38.6226, lng: -90.1928}
     var bushMarker = new google.maps.Marker({position: bush, map: map})
   }
+
+/* Set the width of the side navigation to 250px */
+function openNav() {
+    document.getElementById("mySidenav").style.width = "400px";
+}
+
+/* Set the width of the side navigation to 0 */
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+}
