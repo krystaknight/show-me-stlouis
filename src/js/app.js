@@ -31,13 +31,9 @@ function initMap() {
   //////////////////////////////////////////////////////////////////////
   // place object
   var Place = function(name, location, addr, rating) {
-    this.name = name; //pre-set
-    this.location = location; // pre-set
-    this.addr = addr; //from yelp api
-    this.rating = rating; //from yelp api
-    this.content = "<div>" + name + "</div><div>" + addr;
+    var content = "<div>" + name + "</div><div>" + addr;
     var infowindow = new google.maps.InfoWindow({
-      content: this.content
+      content: content
     });
     var marker = new google.maps.Marker({
       position: location,
@@ -46,8 +42,18 @@ function initMap() {
     marker.addListener("click", function() {
       infowindow.open(map, marker);
     });
-    this.marker = marker;
-    this.show = true; //default to true
+
+    var place = {
+      name: name, //pre-set
+      location: location, // pre-set
+      addr: addr, //from foursquare api
+      rating: rating, //from foursqaure api
+      marker: marker,
+      infowindow: infowindow,
+      show: true //default to true
+    };
+
+    return place;
   }
 
   //5 places to see in St.Louis
@@ -90,7 +96,7 @@ function initMap() {
     name: 'Botanical Gardens'
   }
 
-  var simplePlaces = [busch, zoo, arch, cityMuseum, gardens]
+  var simplePlaces = [busch, zoo, arch, cityMuseum, gardens];
   simplePlaces.forEach(getInfo)
 
   function getInfo(item, index) {
@@ -115,8 +121,9 @@ function initMap() {
         var rating = result.hasOwnProperty('rating') ? result.rating : '';
         item.rating = rating || 'none';
 
-        var newPlace = new Place(item.name, item.location, item.address, item.rating)
+        var newPlace = Place(item.name, item.location, item.address, item.rating)
         completePlaces.push(newPlace)
+
       },
       error: function(e) {
         console.log("ERROR: " + e)
@@ -124,24 +131,26 @@ function initMap() {
     });
   }
 
-
-  var ViewModel = {
+  var ViewModel = function() {
 
     // when view model is initailized get info for each place and create place object
-    placeList: completePlaces,
+    this.placeList = completePlaces;
+    console.log(completePlaces.length);
 
-    showAll: function() {
+    this.showAll = function() {
 
-    },
+    };
 
-    showFree: function() {
+    this.showFree = function() {
 
-    },
+    };
 
   };
-  console.log(ViewModel.placeList)
-  ko.applyBindings(ViewModel);
 
+  //must set timeout so completePlaces.push is async
+  setTimeout(function() {
+    ko.applyBindings(new ViewModel());
+  }, 5000);
 }
 
 

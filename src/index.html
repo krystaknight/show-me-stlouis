@@ -22,14 +22,12 @@
       <option value="free" data-bind="click: showFree">Free Places</option>
     </select>
     <ul data-bind="foreach: placeList">
-      <li data-bind="text: name"></li>
-      <!-- <li data-bind="text: name" id="place">
-        <!-- if show for this object is true
-        <div class="place-holder" data-bind="visable: place.show">
+      <li class="place" data-bind="visable: show">
+        <!--if show for this object is true-->
         <div class="place-title" data-bind="text: name"></div>
         <div class="place-address" data-bind="text: addr"></div>
         <div class="place-reviews" data-bind="text: rating"></div>
-      </li> -->
+      </li>
     </ul>
   </div>
 
