@@ -11,7 +11,9 @@ function closeNav() {
 
 ////////////////////////MAP////////////////////////////////
 var map;
-
+var completePlaces = [];
+var CLIENT_ID = "4Q1OVHHXPENTRL3JQN5ODBJJPUNTO2NGB2APYO5JYDKHGLRK";
+var CLIENT_SECRET = "ZL4NPBEBU1114V2KY5PEHYVQ21VENYDFAQPYWIWISGBPWDNV";
 //Initailize map
 function initMap() {
   var stl = {
@@ -28,12 +30,11 @@ function initMap() {
 
   //////////////////////////////////////////////////////////////////////
   // place object
-  var Place = function(name, location, addr, reviews, attr) {
+  var Place = function(name, location, addr, rating) {
     this.name = name; //pre-set
     this.location = location; // pre-set
     this.addr = addr; //from yelp api
-    this.reviews = reviews; //from yelp api
-    this.attr = attr; //pre-set
+    this.rating = rating; //from yelp api
     this.content = "<div>" + name + "</div><div>" + addr;
     var infowindow = new google.maps.InfoWindow({
       content: this.content
@@ -49,59 +50,101 @@ function initMap() {
     this.show = true; //default to true
   }
 
-  var viewModel = {
+  //5 places to see in St.Louis
+  var busch = {
+    location: {
+      lat: 38.6226,
+      lng: -90.1928
+    },
+    name: 'Busch Stadium'
+  }
+  var zoo = {
+    location: {
+      lat: 38.6367,
+      lng: -90.2932
+    },
+    name: 'St. Louis Zoo'
+  }
+
+  var cityMuseum = {
+    location: {
+      lat: 38.6336,
+      lng: -90.2006
+    },
+    name: 'St. Louis City Museum'
+  }
+
+  var arch = {
+    location: {
+      lat: 38.6247,
+      lng: -90.1848
+    },
+    name: 'St. Louis Arch'
+  }
+
+  var gardens = {
+    location: {
+      lat: 38.6128,
+      lng: -90.2594
+    },
+    name: 'Botanical Gardens'
+  }
+
+  var simplePlaces = [busch, zoo, arch, cityMuseum, gardens]
+  simplePlaces.forEach(getInfo)
+
+  function getInfo(item, index) {
+    $.ajax({
+      url: 'https://api.foursquare.com/v2/venues/search',
+      dataType: 'json',
+      data: 'limit=1' +
+        '&ll=' + item.location.lat + ',' + item.location.lng +
+        '&client_id=' + CLIENT_ID +
+        '&client_secret=' + CLIENT_SECRET +
+        '&intent=match' +
+        '&query=' + item.name +
+        '&v=' + '20180626',
+      async: true,
+      success: function(data) {
+        var result = data.response.venues[0];
+
+        var location = result.hasOwnProperty('location') ? result.location : '';
+        if (location.hasOwnProperty('address')) {
+          item.address = location.address || '';
+        }
+        var rating = result.hasOwnProperty('rating') ? result.rating : '';
+        item.rating = rating || 'none';
+
+        var newPlace = new Place(item.name, item.location, item.address, item.rating)
+        completePlaces.push(newPlace)
+      },
+      error: function(e) {
+        console.log("ERROR: " + e)
+      }
+    });
+  }
+
+
+  var ViewModel = {
+
     // when view model is initailized get info for each place and create place object
-    place: [
-      new Place('Bush Stadium', {
-        lat: 38.6226,
-        lng: -90.1928
-      }, '', '', [
-        "free"
-      ])
-    ],
+    placeList: completePlaces,
 
     showAll: function() {
-      //show all places in list
-    },
-    showFree: function() {
-      //show free places
-    }
-  };
 
-  ko.applyBindings(viewModel);
+    },
+
+    showFree: function() {
+
+    },
+
+  };
+  console.log(ViewModel.placeList)
+  ko.applyBindings(ViewModel);
 
 }
 
 
+
+
 // 5 places to see in St. Louis
-// var fp = {
-//   location: {
-//     lat: 38.6365,
-//     lng: -90.2876
-//   },
-//   name: 'Forest Park'
-// }
-//
-// var cityMuseum = {
-//   location: {
-//     lat: 38.6336,
-//     lng: -90.2006
-//   },
-//   name: 'St. Louis City Museum'
-// }
-//
-// var arch = {
-//   location: {
-//     lat: 38.6247,
-//     lng: -90.1848
-//   },
-//   name: 'St. Louis Arch'
-// }
-//
-// var gardens = {
-//   location: {
-//     lat: 38.6128,
-//     lng: -90.2594
-//   },
-//   name: 'Botanical Gardens'
-// }

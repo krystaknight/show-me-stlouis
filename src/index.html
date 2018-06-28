@@ -21,14 +21,15 @@
       <option value="all" data-bind="click: showAll">All</option>
       <option value="free" data-bind="click: showFree">Free Places</option>
     </select>
-    <ul data-bind="foreach: place">
-      <li id="place">
+    <ul data-bind="foreach: placeList">
+      <li data-bind="text: name"></li>
+      <!-- <li data-bind="text: name" id="place">
         <!-- if show for this object is true
-        <div class="place-holder" data-bind="visable: place.show">-->
+        <div class="place-holder" data-bind="visable: place.show">
         <div class="place-title" data-bind="text: name"></div>
         <div class="place-address" data-bind="text: addr"></div>
-        <div class="place-reviews" data-bind="text: reviews"></div>
-      </li>
+        <div class="place-reviews" data-bind="text: rating"></div>
+      </li> -->
     </ul>
   </div>
 
@@ -43,8 +44,9 @@
   <div id="map" class="map-container"></div>
 
 </body>
-<script src="js/lib/knockout.min.js"></script>
-<script src="js/app.js"></script>
+<script src="js/lib/jquery.min.js"></script>
+<script async src="js/lib/knockout.min.js"></script>
+<script async src="js/app.js"></script>
 <script async defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC-lHC8MKfKbv89rsxu0VYpkuvhiP4UKew&callback=initMap"></script>
 <script async src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 
