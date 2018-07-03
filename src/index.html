@@ -14,19 +14,16 @@
 <body>
   <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <!--
-        TODO this is where i will add knockout stuff and filter
-        -->
     <select>
-      <option value="all" data-bind="click: showAll">All</option>
-      <option value="free" data-bind="click: showFree">Free Places</option>
+      <option selected="selected" value="all" data-bind="click: showAll">All</option>
+      <option value="cool" data-bind="click: showCool">Cool Places</option>
     </select>
-    <ul data-bind="foreach: placeList">
-      <li class="place" data-bind="visable: show">
-        <!--if show for this object is true-->
+    <ul data-bind="foreach: completePlaces">
+      <!--if show for this object is true-->
+      <li class="place" data-bind="visible: show">
+        <img class="icon" data-bind="attr: {src: icon}"/>
         <div class="place-title" data-bind="text: name"></div>
         <div class="place-address" data-bind="text: addr"></div>
-        <div class="place-reviews" data-bind="text: rating"></div>
       </li>
     </ul>
   </div>
