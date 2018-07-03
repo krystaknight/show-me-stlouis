@@ -50,10 +50,20 @@ var gardens = {
   name: 'Missouri Botanical Garden'
 }
 
+//chooses a random number to base filter on
+function isCool() {
+  var num = Math.floor((Math.random() * 5) + 1);
+  if (num > 3) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 ////////////////////////MAP////////////////////////////////
 var map;
 var completePlaces = ko.observableArray();
+var markers = []
 var CLIENT_ID = "4Q1OVHHXPENTRL3JQN5ODBJJPUNTO2NGB2APYO5JYDKHGLRK";
 var CLIENT_SECRET = "ZL4NPBEBU1114V2KY5PEHYVQ21VENYDFAQPYWIWISGBPWDNV";
 //Initailize map
@@ -70,43 +80,18 @@ function initMap() {
       center: stl
     });
 
-    // place object creates marker for each place unpon intilization and returns place object
-    var Place = function(name, location, addr, icon) {
-      var content = "<div>" + name + "</div><div>" + addr+"</div>";
-      var infowindow = new google.maps.InfoWindow({
-        content: content
-      });
-      var marker = new google.maps.Marker({
-        position: location,
-        map: map
-      });
-      marker.addListener("click", function() {
-        infowindow.open(map, marker);
-      });
-
-      //chooses a random number to base filter on
-      function isCool(){
-        var num = Math.floor((Math.random() * 5) + 1);
-        if(num > 3){
-          return true;
-        }else{
-          return false;
-        }
-      }
-
-      var place = {
-        name: name, //pre-set
-        location: location, // pre-set
-        addr: addr, //from foursquare api
-        icon: icon, //from foursqaure api
-        marker: marker,
-        isCool: isCool(),
-        infowindow: infowindow,
-        show: ko.observable(true) //default to true
-      };
-
-      return place;
-    }
+  // place object creates marker for each place unpon intilization and returns place object
+  var Place = function(name, location, addr, icon) {
+    var place = {
+      name: name, //pre-set
+      location: location, // pre-set
+      addr: addr, //from foursquare api
+      icon: icon, //from foursqaure api
+      isCool: isCool(),
+      show: ko.observable(true) //default to true
+    };
+    return place;
+  }
 
   //call the foursqaure api for each place and get address and icon, then create a new Place object
   var simplePlaces = [busch, zoo, arch, cityMuseum, gardens];
@@ -140,6 +125,18 @@ function initMap() {
 
         var newPlace = Place(item.name, item.location, address, icon)
         completePlaces.push(newPlace)
+        var content = "<div>" + item.name + "</div><div>" + address + "</div>";
+        var infowindow = new google.maps.InfoWindow({
+          content: content
+        });
+        var marker = new google.maps.Marker({
+          position: item.location,
+          map: map
+        });
+        marker.addListener("click", function() {
+          infowindow.open(map, marker);
+        });
+        markers.push(marker)
 
       },
       error: function(e) {
@@ -148,28 +145,46 @@ function initMap() {
       }
     });
   }
+
 }
 
+// Removes the markers from the map, but keeps them in the array.
+function clearMarkers(location) {
+  for (var i = 0; i < markers.length; i++) {
+    if (markers[i].getPosition().lat() == location.lat || markers[i].getPosition().lng() == location.lng) {
+      markers[i].setMap(null);
+    }
+  }
+}
+
+// Shows any markers currently in the array.
+function showMarkers() {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  }
+}
 
 
 var ViewModel = function() {
   var cpLength = completePlaces().length;
 
   this.showAll = function() {
-    for(var i = 0; i < cpLength; i++){
-      if(!completePlaces()[i].isCool){
+    for (var i = 0; i < cpLength; i++) {
+      if (!completePlaces()[i].isCool) {
         completePlaces()[i].show(true)
+        showMarkers()
       }
     }
   };
 
   this.showCool = function() {
-    console.log("showcool")
-    for(var i = 0; i < cpLength; i++){
-      if(!completePlaces()[i].isCool){
-        completePlaces()[i].show(false)
-        console.log("Uncool Places")
-        console.log(completePlaces()[i])
+    console.log("Uncool Places")
+    for (var i = 0; i < cpLength; i++) {
+      var item = completePlaces()[i]
+      if (!item.isCool) {
+        item.show(false)
+        console.log(item)
+        clearMarkers(item.location)
       }
     }
   };

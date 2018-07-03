@@ -1,4 +1,13 @@
-##To run
+#Show Me St. Louis!
+
+Sharing my favorite 5 places to see in St. Louis.
+
+All place info is from the FourSquare api. https://developer.foursquare.com/
+
+## Filters
+Using the filter you can see what places are cool and aren't cool, but be aware, the cool places will change each time you visit!
+
+## To run
 
 #### API's
 - Google Maps
