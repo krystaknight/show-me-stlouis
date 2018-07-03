@@ -143,11 +143,13 @@ function initMap() {
 
       },
       error: function(e) {
-        console.log("ERROR: " + e)
+        document.getElementById("foursquareError").style.visibility = "visible"
+        console.log("ERROR " + e.toString())
       }
     });
   }
 }
+
 
 
 var ViewModel = function() {

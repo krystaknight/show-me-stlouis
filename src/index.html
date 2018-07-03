@@ -18,6 +18,7 @@
       <option selected="selected" value="all" data-bind="click: showAll">All</option>
       <option value="cool" data-bind="click: showCool">Cool Places</option>
     </select>
+    <p id="foursquareError">Sorry but we cannot reach Foursquare to get your information. Please try again</p>
     <ul data-bind="foreach: completePlaces">
       <!--if show for this object is true-->
       <li class="place" data-bind="visible: show">

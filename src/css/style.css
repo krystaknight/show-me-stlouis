@@ -37,6 +37,9 @@ ul{
   font-size: 18px;
   font-weight: bold;
 }
+#foursquareError{
+   visibility: hidden;
+}
 
 /* The side navigation menu */
 .sidenav {
