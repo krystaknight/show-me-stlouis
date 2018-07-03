@@ -21,6 +21,14 @@ html, body {
   z-index: 9999;
   background-color: #808080;
 }
+.place{
+  background-color: #33FFBD;
+  padding: 20px;
+  margin: 5px;
+}
+ul{
+  list-style-type: none;
+}
 
 /* The side navigation menu */
 .sidenav {

@@ -29,7 +29,7 @@ function initMap() {
     });
 
   //////////////////////////////////////////////////////////////////////
-  // place object
+  // place object creates marker for each place unpon intilization and returns place object
   var Place = function(name, location, addr, rating) {
     var content = "<div>" + name + "</div><div>" + addr;
     var infowindow = new google.maps.InfoWindow({
@@ -96,6 +96,7 @@ function initMap() {
     name: 'Botanical Gardens'
   }
 
+  //call the foursqaure api for each place and get address and rating, then create a new Place object
   var simplePlaces = [busch, zoo, arch, cityMuseum, gardens];
   simplePlaces.forEach(getInfo)
 
@@ -130,28 +131,26 @@ function initMap() {
       }
     });
   }
+}
 
-  var ViewModel = function() {
+var ViewModel = function() {
 
-    // when view model is initailized get info for each place and create place object
-    this.placeList = completePlaces;
-    console.log(completePlaces.length);
+  this.placeList = completePlaces;
 
-    this.showAll = function() {
-
-    };
-
-    this.showFree = function() {
-
-    };
+  this.showAll = function() {
 
   };
 
-  //must set timeout so completePlaces.push is async
-  setTimeout(function() {
-    ko.applyBindings(new ViewModel());
-  }, 5000);
-}
+  this.showFree = function() {
+
+  };
+
+};
+
+//array.push is async so must wait to create ViewModel
+const wait = time => new Promise((resolve) => setTimeout(resolve, time));
+wait(3000).then(() => ko.applyBindings(new ViewModel()));
+
 
 
 
