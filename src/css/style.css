@@ -41,6 +41,13 @@ ul{
    visibility: hidden;
 }
 
+#outer{
+    width:100%;
+    text-align: center;
+}
+.inner{
+    display: inline-block;
+}
 /* The side navigation menu */
 .sidenav {
     height: 100%; /* 100% Full-height */
