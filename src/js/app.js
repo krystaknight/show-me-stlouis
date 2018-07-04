@@ -2,13 +2,17 @@
 /* Set the width of the side navigation to 250px */
 function openNav() {
   document.getElementById("mySidenav").style.width = "400px";
-}
+};
 
 /* Set the width of the side navigation to 0 */
 function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
-}
+};
 
+function onerror() {
+  console.log("Google Maps connection timeout");
+
+};
 //////////////////////////////////////////////////////////////////////
 //5 places to see in St.Louis
 var busch = {
@@ -17,14 +21,14 @@ var busch = {
     lng: -90.1928
   },
   name: 'Busch Stadium'
-}
+};
 var zoo = {
   location: {
     lat: 38.6367,
     lng: -90.2932
   },
   name: 'St. Louis Zoo'
-}
+};
 
 var cityMuseum = {
   location: {
@@ -32,7 +36,7 @@ var cityMuseum = {
     lng: -90.2006
   },
   name: 'St. Louis City Museum'
-}
+};
 
 var arch = {
   location: {
@@ -40,7 +44,7 @@ var arch = {
     lng: -90.1848
   },
   name: 'St. Louis Arch'
-}
+};
 
 var gardens = {
   location: {
@@ -58,6 +62,18 @@ function isCool() {
   } else {
     return false;
   }
+}
+
+var Place = function(name, location, addr, icon) {
+  var place = {
+    name: name, //pre-set
+    location: location, // pre-set
+    addr: addr, //from foursquare api
+    icon: icon, //from foursqaure api
+    isCool: isCool(),
+    show: ko.observable(true) //default to true
+  };
+  return place;
 }
 
 ////////////////////////MAP////////////////////////////////
@@ -81,17 +97,7 @@ function initMap() {
     });
 
   // place object creates marker for each place unpon intilization and returns place object
-  var Place = function(name, location, addr, icon) {
-    var place = {
-      name: name, //pre-set
-      location: location, // pre-set
-      addr: addr, //from foursquare api
-      icon: icon, //from foursqaure api
-      isCool: isCool(),
-      show: ko.observable(true) //default to true
-    };
-    return place;
-  }
+
 
   //call the foursqaure api for each place and get address and icon, then create a new Place object
   var simplePlaces = [busch, zoo, arch, cityMuseum, gardens];
@@ -141,7 +147,7 @@ function initMap() {
       },
       error: function(e) {
         document.getElementById("foursquareError").style.visibility = "visible"
-        console.log("ERROR " + e.toString())
+        console.log("ERROR: Foursquare cannot be reached.")
       }
     });
   }
@@ -164,28 +170,61 @@ function showMarkers() {
   }
 }
 
+function resetShow() {
+  for (var i = 0; i < completePlaces().length; i++) {
+    completePlaces()[i].show(true)
+  }
+}
+
 
 var ViewModel = function() {
-  var cpLength = completePlaces().length;
+  var cpLength = 5;
 
   this.showAll = function() {
-    for (var i = 0; i < cpLength; i++) {
-      if (!completePlaces()[i].isCool) {
-        completePlaces()[i].show(true)
-        showMarkers()
-      }
-    }
+    resetShow()
+    showMarkers()
+    document.getElementById("place").style.backgroundColor = "#33FFBD"
   };
 
   this.showCool = function() {
     console.log("Uncool Places")
+    resetShow()
+    showMarkers()
+    var noCool = 0
     for (var i = 0; i < cpLength; i++) {
       var item = completePlaces()[i]
       if (!item.isCool) {
         item.show(false)
         console.log(item)
         clearMarkers(item.location)
+        noCool += 1
       }
+      //why doesn't this work :(
+      document.getElementById("place").style.backgroundColor = "#33A2FF"
+    }
+    if (noCool == 5) {
+      document.getElementById("no-cool").style.visibility = "visible"
+    }
+  };
+
+  this.showUncool = function() {
+    console.log("Cool Places")
+    resetShow()
+    showMarkers()
+    var noUncool = 0
+    for (var i = 0; i < cpLength; i++) {
+      var item = completePlaces()[i]
+      if (item.isCool) {
+        item.show(false)
+        console.log(item)
+        clearMarkers(item.location)
+        noUncool += 1
+      }
+      //why doesn't this work :(
+      document.getElementById("place").style.backgroundColor = "#FF3352"
+    }
+    if (noUncool == 5) {
+      document.getElementById("no-uncool").style.visibility = "visible"
     }
   };
 

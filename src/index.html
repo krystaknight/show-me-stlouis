@@ -17,16 +17,19 @@
     <select>
       <option selected="selected" value="all" data-bind="click: showAll">All</option>
       <option value="cool" data-bind="click: showCool">Cool Places</option>
+      <option value="uncool" data-bind="click: showUncool">Uncool Places</option>
     </select>
-    <p id="foursquareError">Sorry but we cannot reach Foursquare to get your information. Please try again</p>
     <ul data-bind="foreach: completePlaces">
       <!--if show for this object is true-->
-      <li class="place" data-bind="visible: show">
-        <img class="icon" data-bind="attr: {src: icon}"/>
+      <li id="place" class="place" data-bind="visible: show">
+        <img class="icon" data-bind="attr: {src: icon}" />
         <div class="place-title" data-bind="text: name"></div>
         <div class="place-address" data-bind="text: addr"></div>
       </li>
     </ul>
+    <p id="foursquareError">Sorry but we cannot reach Foursquare to get your information. Please try again</p>
+    <p id="no-cool">Sorry, no cool places in STL today!</p>
+    <p id='no-uncool'>Every place in STL is cool today!</p>
   </div>
 
 

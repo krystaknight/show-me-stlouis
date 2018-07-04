@@ -37,7 +37,7 @@ ul{
   font-size: 18px;
   font-weight: bold;
 }
-#foursquareError{
+#foursquareError, #no-cool, #no-uncool, #map-error{
    visibility: hidden;
 }
 
