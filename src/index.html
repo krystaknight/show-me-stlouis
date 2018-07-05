@@ -7,7 +7,6 @@
         <meta name="description" content=" Map of the best places in St. Louis. ">
         <meta name="author" content=" Krysta Knight ">
         <title>Show Me St. Louis</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <link rel="stylesheet" href="css/style.css" />
     </head>
 
@@ -21,7 +20,7 @@
             </div>
             <ul data-bind="foreach: completePlaces">
                 <!--if show for this object is true-->
-                <li id="place" class="place" data-bind="visible: show, attr: {id: name}" onclick="animateMarker(this.id)">
+                <li id="place" class="place" data-bind="visible: show, attr: {id: name}, click: $parent.animate">
                     <img class="icon" data-bind="attr: {src: icon}" />
                     <div class="place-title" data-bind="text: name"></div>
                     <div class="place-address" data-bind="text: address"></div>
@@ -43,6 +42,7 @@
         <div id="map" class="map-container"></div>
 
     </body>
+    <!--Scripts are loaded in a particular order-->
     <script src="js/map.js"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC-lHC8MKfKbv89rsxu0VYpkuvhiP4UKew&callback=initMap"></script>
     <script src="js/lib/jquery.min.js"></script>

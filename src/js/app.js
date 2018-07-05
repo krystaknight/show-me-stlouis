@@ -73,9 +73,10 @@ var gardens = {
 
 var simplePlaces = [busch, zoo, arch, cityMuseum, gardens];
 var completePlaces = ko.observableArray();
+
+//get address and icon from foursqaure for each item
 var CLIENT_ID = "4Q1OVHHXPENTRL3JQN5ODBJJPUNTO2NGB2APYO5JYDKHGLRK";
 var CLIENT_SECRET = "ZL4NPBEBU1114V2KY5PEHYVQ21VENYDFAQPYWIWISGBPWDNV";
-//get address and icon from foursqaure for each item
 simplePlaces.forEach(getInfo)
 function getInfo(item, index) {
   $.ajax({
@@ -115,8 +116,8 @@ function getInfo(item, index) {
   });
 }
 
-var markers = []
 //create marker for each place
+var markers = []
   simplePlaces.forEach(createMarker)
   function createMarker(item, index){
     var content = "<div>" + item.name + "</div>";
@@ -129,11 +130,14 @@ var markers = []
     });
     item.marker.addListener("click", function() {
       infowindow.open(map, item.marker);
-      if (item.marker.getAnimation() !== null) {
-        item.marker.setAnimation(null);
-      } else {
-        item.marker.setAnimation(google.maps.Animation.BOUNCE);
-      }
+      item.marker.setAnimation(google.maps.Animation.BOUNCE);
+      document.getElementById(item.name).style.backgroundColor = "#ff5733"
+      //animation timeout
+      window.setTimeout(function(){
+        item.marker.setAnimation(null)
+        document.getElementById(item.name).style.backgroundColor = "#33FFBD"
+      }, 3750);
+
     });
     markers.push(item.marker)
   }
@@ -147,13 +151,14 @@ function clearMarkers(location) {
   }
 }
 
-// Shows any markers currently in the array.
+// Shows all markers currently in the array.
 function showMarkers() {
   for (var i = 0; i < markers.length; i++) {
     markers[i].setMap(map);
   }
 }
 
+// reset show to true for all places
 function resetShow() {
   for (var i = 0; i < completePlaces().length; i++) {
     completePlaces()[i].show(true)
@@ -162,15 +167,18 @@ function resetShow() {
 
 
 var ViewModel = function() {
+  var self = this;
   var cpLength = simplePlaces.length;
 
-  this.showAll = function() {
+  self.showAll = function(place) {
     resetShow()
     showMarkers()
-    document.getElementById("place").style.backgroundColor = "#33FFBD"
+    completePlaces().forEach(function(place){
+      document.getElementById(place.name).style.backgroundColor = "#33FFBD"
+    });
   };
 
-  this.showCool = function() {
+  self.showCool = function() {
     console.log("Uncool Places")
     resetShow()
     showMarkers()
@@ -184,13 +192,15 @@ var ViewModel = function() {
         noCool += 1
       }
     }
+    completePlaces().forEach(function(place){
+      document.getElementById(place.name).style.backgroundColor = "#f9ff33"
+    });
     if (noCool == 5) {
       document.getElementById("no-cool").style.visibility = "visible"
     }
-    document.getElementById("place").style.backgroundColor = "#33A2FF"
   };
 
-  this.showUncool = function() {
+  self.showUncool = function() {
     console.log("Cool Places")
     resetShow()
     showMarkers()
@@ -204,12 +214,28 @@ var ViewModel = function() {
         noUncool += 1
       }
     }
+    completePlaces().forEach(function(place){
+      document.getElementById(place.name).style.backgroundColor = "#f933ff"
+    });
     if (noUncool == 5) {
       document.getElementById("no-uncool").style.visibility = "visible"
     }
-    //why doesn't this work :(
-    document.getElementById("place").style.backgroundColor = "#FF3352"
   };
+
+  self.animate = function(place){
+    document.getElementById(place.name).style.backgroundColor = "#ff5733"
+    var location = place.location
+    for (var i = 0; i < markers.length; i++) {
+      if (markers[i].getPosition().lat() == location.lat || markers[i].getPosition().lng() == location.lng) {
+        //animate marker and change color
+        place.marker.setAnimation(google.maps.Animation.BOUNCE);
+      }
+    }
+    window.setTimeout(function(){
+      place.marker.setAnimation(null)
+      document.getElementById(place.name).style.backgroundColor = "#33FFBD"
+    }, 3750);
+  }
 
 };
 
