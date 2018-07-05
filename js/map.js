@@ -1,5 +1,24 @@
 var map;
 var markers = []
+
+$.ajax({
+  url:"https://maps.googleapis.com/maps/api/js?key=AIzaSyC-lHC8MKfKbv89rsxu0VYpkuvhiP4UKew",
+  async: true,
+  dataType: 'jsonp',
+  success: function(){
+    initMap()
+    document.getElementById("loader").remove()
+    document.getElementById("map-error").remove()
+    document.getElementById("map").style.visibility = "visible"
+  },
+  error: function(){
+    document.getElementById("loader").remove()
+    document.getElementById("map").remove()
+    document.getElementById("map-error").style.visibility = "visible"
+  },
+  timeout: 3000
+});
+
 //Initailize map
 function initMap() {
   var stl = {
@@ -14,7 +33,6 @@ function initMap() {
     });
 
     //create marker for each place
-
       simplePlaces.forEach(createMarker)
       function createMarker(item, index){
         var content = "<div>" + item.name + "</div>";

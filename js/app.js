@@ -111,7 +111,8 @@ function getInfo(item, index) {
     error: function(e) {
       document.getElementById("foursquareError").style.visibility = "visible"
       console.log("ERROR: Foursquare cannot be reached. " + e.code)
-    }
+    },
+    timeout: 3000
   });
 }
 
