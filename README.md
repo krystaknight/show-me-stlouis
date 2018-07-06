@@ -13,7 +13,7 @@ Using the filter you can see what places are cool and aren't cool, but be aware,
 3. Get additional information for each place from a third party API.
 4. Using KnockoutJs, list these five places in a side bar.
 5. If a marker is clicked an info-window should appear and the coordinating list item should be indicated.
-6. If a list item is clicked the coordinating marking should be indicated.
+6. If a list item is clicked the coordinating marker should be indicated.
 7. Gracefully handle any API errors.
 
 ### Technolgies Used
